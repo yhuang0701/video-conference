@@ -6,7 +6,7 @@ import { Button } from "./ui/button"
 
 const MeetingSetup = ({ setIsSetupComplete }:
   { setIsSetupComplete: (value: boolean) => void }) => {
-  const [isMicCamToggledOn, setisMicCamToggledOn] = useState(false)
+  const [isMicCamToggledOn, setisMicCamToggledOn] = useState(true)
 
   const call = useCall();
 
@@ -15,14 +15,17 @@ const MeetingSetup = ({ setIsSetupComplete }:
   }
 
   useEffect(() => {
-    if (isMicCamToggledOn) {
-      call?.camera.disable();
-      call?.microphone.disable();
-    } else {
-      call?.camera.enable();
-      call?.microphone.enable();
+    const toggleMicCam = async () => {
+      if (isMicCamToggledOn) {
+        await call?.camera.disable();
+        await call?.microphone.disable();
+      } else {
+        await call?.camera.enable();
+        await call?.microphone.enable();
+      }
     }
 
+    toggleMicCam();
   }, [isMicCamToggledOn, call?.camera, call?.microphone])
 
 
